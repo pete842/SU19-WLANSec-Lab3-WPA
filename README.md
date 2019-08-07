@@ -46,7 +46,7 @@ Using your previously created script as a starting point, create a new script ``
 
 ## Important info:
 
-- The last message of the 4-way handshake contains a MIC in the payload. When you calculate your own MIC, you need to change the bytes of the payload containing the MIC to ```\x00``` (read this part many times until you understand what it means... see the last message in Wireshark to help you understand)
+- The last message of the 4-way handshake contains a MIC in the payload. When you calculate your own MIC, you need to change the last bytes of the payload containing the MIC to ```\x00``` (read this part many times until you understand what it means... see the last message in Wireshark to help you understand)
 - The calculation of the MIC in the authentication does not use Michael. It can use MD5 or SHA-1 and it is truncated to 16 bytes (32 digits/chars). The 4-way handshake contains the necessary information in the filed Key Information
 - The command ```b2a_hex(variable)``` is equivalent to ```variable.encode("hex")``` - it returns a string with the hex representation of the binary data contained in ```variable```. Each byte in ```variable``` will be converted to its hex representation with two digits.  
 - The command ```a2b_hex(variable)``` is equivalent to ```variable.decode("hex")``` - this function is the inverse of ```b2a_hex(variable)```
