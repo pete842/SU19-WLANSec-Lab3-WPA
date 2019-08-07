@@ -25,7 +25,7 @@ You will also need the capture file [wpa\_handshake.cap](./files/wpa_handshake.c
 - Open the capture file [wpa\_key\_derivation.py](./files/wpa_key_derivation.py) using Wireshark
 - Execute the script using ```python wpa_key_derivation.py```
 - Try to identify the values shown by the script in the Wireshark capture
-- Analyse the script. In particular, __pay attention__ to the variable ```data``` containing the payload of the frame. Compare this data to the payload of the 4th frame of the handshake (hint: the last bytes are different!). Read [Important info]() for an explanation.
+- Analyse the script. In particular, __pay attention__ to the variable ```data``` containing the payload of the frame. Compare this data to the payload of the 4th frame of the handshake (hint: the last bytes are different!). Read [Important info](#important-info) for an explanation.
 - __Modify the script__ sot that it obtains directly from the ```pcap``` all the values that are currently hardcoded (```ssid```, ```APmac```, ```Clientmac```, nonces…) 
 
 
