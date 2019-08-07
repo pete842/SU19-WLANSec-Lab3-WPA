@@ -41,23 +41,24 @@ wpa=rdpcap("wpa_handshake.cap")
 # Important parameters for key derivation - some of them can be obtained from the pcap file
 passPhrase  = "actuelle" #this is the passphrase of the WPA network
 A           = "Pairwise key expansion" #this string is used in the pseudo-random function and should never be modified
-ssid        = "SWI"
+ssid        = wpa[0].info
 APmac       = a2b_hex("cebcc8fdcab7") #MAC address of the AP
 Clientmac   = a2b_hex("0013efd015bd") #MAC address of the client
 
 # Authenticator and Supplicant Nonces
-ANonce      = a2b_hex("90773b9a9661fee1f406e8989c912b45b029c652224e8b561417672ca7e0fd91")
-SNonce      = a2b_hex("7b3826876d14ff301aee7c1072b5e9091e21169841bce9ae8a3f24628f264577")
+ANonce      = a2b_hex(b2a_hex(wpa[5].load)[26:90])
+SNonce      = a2b_hex(b2a_hex(wpa[6].load)[26:90])
 
 # This is the MIC contained in the 4th frame of the 4-way handshake. I copied it by hand.
 # When trying to crack the WPA passphrase, we will compare it to our own MIC calculated using passphrases from a dictionary
-mic_to_test = "36eef66540fa801ceee2fea9b7929b40"
+mic_to_test = b2a_hex(wpa[8].load)[154:186]
 
 B           = min(APmac,Clientmac)+max(APmac,Clientmac)+min(ANonce,SNonce)+max(ANonce,SNonce) #used in pseudo-random function
 
 # Take a good look at the contents of this variable. Compare it to the Wireshark last message of the 4-way handshake.
 # In particular, look at the last 16 bytes. Read "Important info" in the lab assignment for explanation
-data        = a2b_hex("0103005f02030a0000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000") 
+data        = a2b_hex("%02x"%wpa[8][5].version + "%02x"%wpa[8][5].type + "%04x"%wpa[8][5].len + b2a_hex(wpa[8][5].load[:77]).decode().ljust(190, '0'))
+
 
 print "\n\nValues used to derivate keys"
 print "============================"
