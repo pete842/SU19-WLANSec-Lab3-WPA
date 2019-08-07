@@ -15,7 +15,7 @@ You will need Scapy but __not__ the Alfa interfaces this time. Please refer to t
 
 ## Your Work
 
-### 1. Obtain parameteters for the derivation of WPA keys  
+### 1. Obtain parameters for the derivation of WPA keys  
 
 
 In this first part, you will recover the the Python script [wpa\_key\_derivation.py](./files/wpa_key_derivation.py). 
@@ -26,7 +26,8 @@ You will also need the capture file [wpa\_handshake.cap](./files/wpa_handshake.c
 - Execute the script using ```python wpa_key_derivation.py```
 - Try to identify the values shown by the script in the Wireshark capture
 - Analyse the script. In particular, __pay attention__ to the variable ```data``` containing the payload of the frame. Compare this data to the payload of the 4th frame of the handshake (hint: the last bytes are different!). Read [Important info](#important-info) for an explanation.
-- __Modify the script__ sot that it obtains directly from the ```pcap``` all the values that are currently hardcoded (```ssid```, ```APmac```, ```Clientmac```, nonces…) 
+- __Modify the script__ sot that it obtains directly from the ```pcap``` all the values that are currently hardcoded (```ssid```, ```APmac```, ```Clientmac```, nonces…)
+- __ATTENTION__: some of the parameters cannot be easily obtained (for example the nonces). You will need to extract them from the raw data of the frame. This is how you access the raw data payload: ```frame.load```
 
 
 ### 2. Scaircrack (aircrack-ng based on Scapy)
