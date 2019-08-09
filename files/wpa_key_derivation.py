@@ -35,7 +35,7 @@ def customPRF512(key,A,B):
         R = R+hmacsha1.digest()
     return R[:blen]
 
-# Read capture file -- it contains beacon, open authentication, associacion, 4-way handshake and data
+# Read capture file -- it contains beacon, open authentication, associacion, 4-way handshake, data and mic
 wpa=rdpcap("wpa_handshake.cap")
 
 # Important parameters for key derivation - some of them can be obtained from the pcap file
