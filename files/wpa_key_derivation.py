@@ -36,7 +36,7 @@ def customPRF512(key,A,B):
     return R[:blen]
 
 # Read capture file -- it contains beacon, open authentication, associacion, 4-way handshake and data
-wpa=rdpcap("wpa_handshake.cap") 
+wpa=rdpcap("wpa_handshake.cap")
 
 # Important parameters for key derivation - some of them can be obtained from the pcap file
 passPhrase  = "actuelle" #this is the passphrase of the WPA network
@@ -49,14 +49,12 @@ Clientmac   = a2b_hex("0013efd015bd") #MAC address of the client
 ANonce      = a2b_hex(b2a_hex(wpa[5].load)[26:90])
 SNonce      = a2b_hex(b2a_hex(wpa[6].load)[26:90])
 
-# This is the MIC contained in the 4th frame of the 4-way handshake. I copied it by hand.
-# When trying to crack the WPA passphrase, we will compare it to our own MIC calculated using passphrases from a dictionary
+#We take the mic from the raw part of the packet
 mic_to_test = b2a_hex(wpa[8].load)[154:186]
 
 B           = min(APmac,Clientmac)+max(APmac,Clientmac)+min(ANonce,SNonce)+max(ANonce,SNonce) #used in pseudo-random function
 
-# Take a good look at the contents of this variable. Compare it to the Wireshark last message of the 4-way handshake.
-# In particular, look at the last 16 bytes. Read "Important info" in the lab assignment for explanation
+#We take version, type len and the rest from the raw part of the packet
 data        = a2b_hex("%02x"%wpa[8][5].version + "%02x"%wpa[8][5].type + "%04x"%wpa[8][5].len + b2a_hex(wpa[8][5].load[:77]).decode().ljust(190, '0'))
 
 
