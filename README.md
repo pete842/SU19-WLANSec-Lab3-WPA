@@ -2,6 +2,7 @@
 
 ## Names
 Pierre Kohler, Pierrick Muller, Kim Wonkyeong
+=======
 
 ## WPA Security
 
@@ -63,5 +64,7 @@ Fork of the original repo. Then, a Pull Request containing :
 - The names of the students. You can add this to the ```README.md```
 - ```wpa_key_derivation.py``` script __modified__ for the automatic recovery of the parameters from the capture file. __Modifications must be extensively commented/documented__
    - Screen grab of your script in action
+   ![wpa_key_derivation.py](img/screen1.png)
 - ```scaircrack.py``` script __extensively commented/documented__ + the wordlist file
    - Screen grab of your script in action
+   ![scaircrack.py](img/screen2.png)
